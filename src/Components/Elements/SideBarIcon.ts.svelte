@@ -10,12 +10,14 @@
       "AiOutlineNodeExpand": AiOutlineNodeExpand,
     }
 
-    export let icon: string
+    // Declare Props
+    export let icon: string = "BsPlus";
     let iconOutput = iconMapping[icon];
-    export let size: number
+    export let size: number = 32;
+    export let tooltip: string = "tooltip 💡";
 </script>
 
 <div class="sidebar-icon group">
-  <Icon src={ iconOutput } size="{size}" />
-  <span class="sidebar-tooltip group-hover:scale-100">tooltip 💡</span>
+  <Icon src={iconOutput} size="{size}" />
+  <span class="sidebar-tooltip group-hover:scale-100">{tooltip}</span>
 </div>
