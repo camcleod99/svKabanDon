@@ -1,12 +1,13 @@
 <script lang="ts">
     import { Icon, IconType } from 'svelte-icons-pack';
     import { AiOutlineNodeExpand } from 'svelte-icons-pack/ai';
-    import { BsPlus, BsGearFill } from 'svelte-icons-pack/bs'
+    import { BsPlus, BsGearFill, BsFileText } from 'svelte-icons-pack/bs'
 
     // Declare the type for iconMapping
     const iconMapping: { [key: string]: IconType } = {
       "BsPlus": BsPlus,
       "BsGearFill": BsGearFill,
+      "BsFileText": BsFileText,
       "AiOutlineNodeExpand": AiOutlineNodeExpand,
     }
 
@@ -14,7 +15,9 @@
     export let icon: string = "BsPlus";
     let iconOutput = iconMapping[icon];
     export let size: number = 32;
-    export let tooltip: string = "tooltip 💡";
+    export let tooltip: string = "❓️What Does This Button Do?";
+
+    // TODO : Implement on click Event
 </script>
 
 <div class="sidebar-icon group">

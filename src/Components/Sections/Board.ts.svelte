@@ -1,12 +1,10 @@
 <script lang="ts">
-
+import Column from "../Content/Column.ts.svelte";
 </script>
 
-<main
-  class="fixed top-16 left-16 h-screen w-screen m-0 flex flex-col bg-red-400 text-white-shadow-l overflow-auto overscroll-none"
->
-  <section class="flex flex-nowrap flex-row">
-    <!--    Row of Columns-->
-    <div class={`flex-1 max-w-20 min-w-20 mt-4 mx-2`}>&nbsp;</div>
+<main id="section_Board" class="m-16 mb-0 px-2 w-screen bg-red-400 overflow-scroll">
+  <section class="flex flex-row ">
+    <Column/>
+    <Column/>
   </section>
 </main>

@@ -1,4 +1,5 @@
 # Milestones
+- Updated 26/04/24
 
 ## Status of Project
 Ongoing - Version 0.0.1
@@ -7,8 +8,10 @@ Ongoing - Version 0.0.1
 
 ### 0.0.1 — Components and Layout
 Importing components from previous project and creating a layout for the project.
-[ ] Components Exported from previous react project
-[ ] Layout "Main"
-    [ ] Header
-    [ ] Sidebar
-    [ ] Board
+
+-[x] Components Exported from previous react project
+-[ ] Layout "Main"
+  - [ ] Header
+  - [ ] Sidebar
+  - [ ] Board
+- [ ] Readme
