@@ -18,9 +18,11 @@
     export let tooltip: string = "❓️What Does This Button Do?";
 
     // TODO : Implement on click Event
+    export let action: () => void = () => console.log('Default action');
+
 </script>
 
 <div class="sidebar-icon group">
-  <Icon src={iconOutput} size="{size}" />
+  <Icon src={iconOutput} size="{size}" on:click="{action}" />
   <span class="sidebar-tooltip group-hover:scale-100">{tooltip}</span>
 </div>
