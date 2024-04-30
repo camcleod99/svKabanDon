@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Icon, IconType } from 'svelte-icons-pack';
+    // @ts-ignore - This is a false positive, the import is working fine
     import { FaSolidTriangleExclamation } from 'svelte-icons-pack/fa';
 </script>
 
@@ -44,6 +45,5 @@
                 Otherthing!
             </button>
         </div>
-
     </div>
 </main>

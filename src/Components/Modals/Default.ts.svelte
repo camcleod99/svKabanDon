@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { Icon, IconType } from 'svelte-icons-pack';
+    import { Icon } from 'svelte-icons-pack';
+    // @ts-ignore - This is a false positive, the import is working fine
     import { FaSolidTriangleExclamation } from 'svelte-icons-pack/fa';
+    import { killModal, modalHeader, modalText } from "../../store";
 </script>
 
 <main id="modal_default"
       class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
       flex justify-center items-center"
-      on:click={() => window.alert('background clicked')}
+      on:click={() => killModal()}
       on:keydown={() => {}}>
     <div id="m_d_body"
          class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
@@ -21,19 +23,20 @@
             </div>
             <div id="m_d_b_c_right" class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">
-                    This is a Modal
+                    { $modalHeader }
                 </h1>
-                <p>This is 29 Acacia Road. And this is Eric, the schoolboy who
-                    leads an exciting double life. For when Eric eats a banana,
-                    an amazing transformation occurs! Eric is Bananaman, ever
-                    alert to the call to action!</p>
+                    {@html $modalText}
+<!--                <p>This is 29 Acacia Road. And this is Eric, the schoolboy who-->
+<!--                    leads an exciting double life. For when Eric eats a banana,-->
+<!--                    an amazing transformation occurs! Eric is Banana-man, ever-->
+<!--                    alert to the call to action!</p>-->
             </div>
         </div>
 
         <div id="m_d_footer" class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
             <button
               class="bg-gray-50 rounded  border-gray-400 border-2 px-2.5 py-1.5 text-black cursor-pointer hover:bg-gray-500 hover:text-white"
-              on:click={() => window.alert('Button 1 Clicked')}
+              on:click={() => killModal()}
               on:keydown={() => {}}>
                 Something!
             </button>
@@ -41,7 +44,7 @@
               class="bg-red-700 rounded px-2.5 py-1.5 text-white cursor-pointer hover:bg-red-500"
               on:click={() => window.alert('Button 2 clicked')}
               on:keydown={() => {}}>
-                Otherthing!
+                Other-thing!
             </button>
         </div>
 

@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2020",
+    "moduleResolution": "node",
+    "types": ["svelte"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
