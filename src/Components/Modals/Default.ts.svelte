@@ -2,13 +2,13 @@
     import { Icon } from 'svelte-icons-pack';
     // @ts-ignore - This is a false positive, the import is working fine
     import { FaSolidTriangleExclamation } from 'svelte-icons-pack/fa';
-    import { killModal, modalHeader, modalText } from "../../store";
+    import { closeModal, modalHeader, modalText } from "../../store";
 </script>
 
 <main id="modal_default"
       class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
       flex justify-center items-center"
-      on:click={() => killModal()}
+      on:click={() => closeModal()}
       on:keydown={() => {}}>
     <div id="m_d_body"
          class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
@@ -36,7 +36,7 @@
         <div id="m_d_footer" class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
             <button
               class="bg-gray-50 rounded  border-gray-400 border-2 px-2.5 py-1.5 text-black cursor-pointer hover:bg-gray-500 hover:text-white"
-              on:click={() => killModal()}
+              on:click={() => closeModal()}
               on:keydown={() => {}}>
                 Something!
             </button>

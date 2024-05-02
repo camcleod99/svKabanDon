@@ -1,7 +1,4 @@
 <script lang="ts">
-  // TypeScript code goes here
-
-  // Props
   export let text: string = 'Enter Some Text, Dipstick!';
   export let action: () => void = () => console.log('Default action');
 </script>

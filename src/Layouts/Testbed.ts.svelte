@@ -6,5 +6,6 @@
 
 <main id="layout_main">
   <ModalManager />
-  <Button text="Test"  action={() => setModal( )} />
+  <Button text="Test"  action={() => setModal({modal: "Default", header: "Header", body: "ipsom lorem upsom."} )} />
+  <Button text="Input"  action={() => setModal({modal: "Create"} )} />
 </main>
