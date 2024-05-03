@@ -3,11 +3,10 @@
   import Divider from '../Elements/Divider.ts.svelte';
   import {activeModal, modalHeader, modalText} from "../../store";
 
-  function setModal(modal: string = "Default", header: string = "Deftauly", body: string = "Default", action: () => void =  () => console.log('Default Action') ){
+  function setModal(modal: string = "Default", header: string = "Deftauly", body: string = "Default" ){
     $activeModal = modal;
     $modalHeader = header;
     $modalText = body;
-    // $modalAction = action;
   }
 </script>
 

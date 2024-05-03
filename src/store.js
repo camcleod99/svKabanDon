@@ -12,7 +12,6 @@ export function setModal({
                              modal = "Default",
                              header = "Default",
                              body = "Default",
-                             action = () => console.log('Default Action'),
                              buttonA = "null",
                              buttonB = "null",
                              actionA = () => console.log('Action A Default'),
