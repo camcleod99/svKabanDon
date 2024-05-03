@@ -1,9 +1,9 @@
 <script lang="ts">
   // import { writable } from 'svelte/store';
   import { closeModal } from '../../store.js';
-  import { Icon  } from 'svelte-icons-pack';
+  import { Icon } from 'svelte-icons-pack';
   // @ts-ignore - This is a false positive, the import is working fine
-  import { FaSolidPlus } from 'svelte-icons-pack/fa';
+  import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';
 
   // Form validation variables
   let task_name = '';
@@ -71,7 +71,7 @@
 <main id="modal_create"
       class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
       flex justify-center items-center"
-      on:click={() => window.alert('background clicked')}
+      on:click={() => closeModal()}
       on:keydown={() => {}}>
     <div id="m_c_body"
          class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
@@ -82,7 +82,7 @@
             <div id="m_c_b_c_icon"
                  class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
-                <Icon src={ FaSolidPlus } size="32"/>
+                <Icon src={ modalIcon } size="32"/>
             </div>
             <div id="m_c_b_c_right" class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">

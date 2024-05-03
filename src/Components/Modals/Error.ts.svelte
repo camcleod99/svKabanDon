@@ -7,7 +7,7 @@
 
     import { Icon } from 'svelte-icons-pack';
     // @ts-ignore - This is a false positive, the import is working fine
-    import { FaSolidExclamation } from 'svelte-icons-pack/fa';
+    import { FaSolidExclamation as modalIcon } from 'svelte-icons-pack/fa';
 </script>
 
 <main id="modal_default"
@@ -24,7 +24,7 @@
             <div id="m-d_b_c_icon"
                  class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
-                <Icon src={ FaSolidExclamation } size="32"/>
+                <Icon src={ modalIcon } size="32"/>
             </div>
             <div id="m_d_b_c_right" class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">

@@ -4,8 +4,10 @@
   import {setModal} from "../store";
 </script>
 
-<main id="layout_main">
+<main id="layout_main" class="gap-2">
   <ModalManager />
   <Button text="Test"  action={() => setModal({modal: "Default", header: "Header", body: "ipsom lorem upsom."} )} />
   <Button text="Input"  action={() => setModal({modal: "Create"} )} />
+  <Button text="Destroy"  action={() => setModal({modal: "Destroy"} )} />
+  <Button text="Task"  action={() => setModal({modal: "Task"} )} />
 </main>

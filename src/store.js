@@ -3,7 +3,6 @@ import { writable } from 'svelte/store';
 export const activeModal = writable("null");
 export const modalHeader = writable("null");
 export const modalText = writable("null");
-export const modalAction = writable(() => console.log('Default action'))
 export const modalButtonA = writable("null");
 export const modalButtonB = writable("null");
 export const modalButtonActionA = writable(() => console.log('Default action'));
@@ -22,7 +21,6 @@ export function setModal({
     activeModal.set(modal);
     modalHeader.set(header);
     modalText.set(body);
-    modalAction.set(action);
     modalButtonA.set(buttonA);
     modalButtonB.set(buttonB);
     modalButtonActionA.set(actionA);
@@ -33,7 +31,6 @@ export function closeModal() {
     activeModal.set("null");
     modalHeader.set("null");
     modalText.set("null");
-    modalAction.set(() => console.log('Default action'));
     modalButtonA.set("null");
     modalButtonB.set("null");
     modalButtonActionA.set(() => console.log('Action A Default'));

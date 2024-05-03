@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Icon } from 'svelte-icons-pack';
     // @ts-ignore - This is a false positive, the import is working fine
-    import { FaSolidTriangleExclamation } from 'svelte-icons-pack/fa';
+    import { FaSolidTriangleExclamation as modalIcon } from 'svelte-icons-pack/fa';
     import { closeModal, modalHeader, modalText } from "../../store";
 </script>
 
@@ -19,17 +19,13 @@
             <div id="m-d_b_c_icon"
                  class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
-                <Icon src={FaSolidTriangleExclamation} size="32"/>
+                <Icon src={ modalIcon } size="32"/>
             </div>
             <div id="m_d_b_c_right" class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">
                     { $modalHeader }
                 </h1>
                     {@html $modalText}
-<!--                <p>This is 29 Acacia Road. And this is Eric, the schoolboy who-->
-<!--                    leads an exciting double life. For when Eric eats a banana,-->
-<!--                    an amazing transformation occurs! Eric is Banana-man, ever-->
-<!--                    alert to the call to action!</p>-->
             </div>
         </div>
 
@@ -42,7 +38,7 @@
             </button>
             <button
               class="bg-red-700 rounded px-2.5 py-1.5 text-white cursor-pointer hover:bg-red-500"
-              on:click={() => window.alert('Button 2 clicked')}
+              on:click={() => closeModal()}
               on:keydown={() => {}}>
                 Other-thing!
             </button>
