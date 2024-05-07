@@ -1,5 +1,4 @@
 <script lang="ts">
-  // import { writable } from 'svelte/store';
   import { closeModal } from '../../store.js';
   import { Icon } from 'svelte-icons-pack';
   // @ts-ignore - This is a false positive, the import is working fine
@@ -68,27 +67,25 @@
   $: task_column_error = validateSelect(task_column);
 </script>
 
-<main id="modal_create"
-      class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
+<main class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
       flex justify-center items-center"
       on:click={() => closeModal()}
       on:keydown={() => {}}>
-    <div id="m_c_body"
-         class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
+    <div class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
          on:click={event => event.stopPropagation()}
          on:keydown={() => {}}>
 
-        <div id="m_c_b_text" class="flex p-4 gap-4 pb-0">
+        <div class="flex p-4 gap-4 pb-0">
             <div id="m_c_b_c_icon"
                  class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
                 <Icon src={ modalIcon } size="32"/>
             </div>
-            <div id="m_c_b_c_right" class="flex-grow">
+            <div class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">
                     New Task
                 </h1>
-              <form id="m_c_b_c_r_form" class="flex flex-col gap-5">
+              <form class="flex flex-col gap-5">
                 <div class="flex flex-col gap-1">
                   <label for="task_name" class="text-gray-800">Task Name <span class="text-red-500">{task_name_error}</span></label>
                   <input type="text" id="task_name" name="task_name" bind:value={task_name} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500"/>
@@ -108,7 +105,7 @@
              </div>
          </div>
 
-         <div id="m_d_footer" class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
+         <div class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
              <button
                class="bg-gray-50 rounded  border-gray-400 border-2 px-2.5 py-1.5 text-black cursor-pointer hover:bg-gray-500 hover:text-white"
                on:click={() => closeModal() }

@@ -3,19 +3,21 @@
   import { closeModal } from '../../store.js';
   import { Icon } from 'svelte-icons-pack';
   // @ts-ignore - This is a false positive, the import is working fine
-  import { FiFolderPlus as modalIcon } from 'svelte-icons-pack/fi';
+  import { FiGlobe as modalIcon } from 'svelte-icons-pack/fi';
 
   // Form validation variables
-  let columnName = '';
-  let columnDescription = '';
+  let boardName = '';
+  let boardDescription = '';
+  
+  // Get the variables for the board
 
   // Error Messages
   const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only' ];
 
   // Function to validate form fields
   function validateForm() {
-    columnNameError = validateInput(columnName);
-    columnDescriptionError = validateInput(columnDescription);
+    boardNameError = validateInput(boardName);
+    boardDescriptionError = validateInput(boardDescription);
   }
 
   // Function to submit task
@@ -23,12 +25,12 @@
     validateForm();
 
     // Only submit the form if there are no validation errors
-    if (!columnNameError && !columnDescriptionError) {
-      const column = {
-        columnName,
-        columnDescription
+    if (!boardNameError && !boardDescriptionError) {
+      const board = {
+        boardName,
+        boardDescription
       }
-      console.log(column);
+      console.log(board);
       window.alert('Submit Clicked');
       closeModal();
       } else {
@@ -48,11 +50,11 @@
   }
 
   // Reactive form Validations
-  $: columnNameError = validateInput(columnName);
-  $: columnDescriptionError = validateInput(columnDescription);
+  $: boardNameError = validateInput(boardName);
+  $: boardDescriptionError = validateInput(boardDescription);
 </script>
 
-<main id="modal_createColumn"
+<main id="modal_modifyBoard"
       class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
       flex justify-center items-center"
       on:click={() => closeModal()}
@@ -62,22 +64,22 @@
          on:keydown={() => {}}>
 
         <div class="flex p-4 gap-4 pb-0">
-            <div id="m_c_b_c_icon"
-                 class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
+            <div class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
                 <Icon src={ modalIcon } size="32"/>
             </div>
             <div class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">
-                    New Column
+                   Modify Board
                 </h1>
               <form class="flex flex-col gap-5">
                 <div class="flex flex-col gap-1">
-                  <label for="task_name" class="text-gray-800">Column Name <span class="text-red-500">{columnNameError}</span></label>
-                  <input type="text" id="task_name" name="task_name" bind:value={columnName} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500"/>
+                  <label for="task_name" class="text-gray-800">Board Name <span class="text-red-500">{boardNameError}</span></label>
+                  <input type="text" id="task_name" name="task_name" bind:value={boardName} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500"/>
 
-                  <label for="task_description" class="text-gray-800">Column Description  <span class="text-red-500">{columnDescriptionError}</span></label>
-                  <input type="text" id="task_description" name="task_description" bind:value={columnDescription} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500"/>
+                  <label for="task_description" class="text-gray-800">Board Description  <span class="text-red-500">{boardDescriptionError}</span></label>
+                  <input type="text" id="task_description" name="task_description" bind:value={boardDescription} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500"/>
+
                 </div>
               </form>
              </div>

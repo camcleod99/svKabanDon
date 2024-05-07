@@ -10,18 +10,16 @@
       flex justify-center items-center"
       on:click={() => closeModal()}
       on:keydown={() => {}}>
-    <div id="m_t_body"
-         class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
+    <div class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
          on:click={event => event.stopPropagation()}
          on:keydown={() => {}}>
 
-        <div id="m_t_b_text" class="flex p-4 gap-4 pb-0">
-            <div id="m-d_b_c_icon"
-                 class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
+        <div class="flex p-4 gap-4 pb-0">
+            <div class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">
                 <Icon src={ modalIcon } size="32"/>
             </div>
-            <div id="m_t_b_c_right" class="flex-grow">
+            <div class="flex-grow">
                 <h1 class="font-bold text-lg mb-5 text-gray-800">
                     [Task Name]
                 </h1>
@@ -31,7 +29,7 @@
             </div>
         </div>
 
-        <div id="m_t_footer" class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
+        <div class="bg-gray-300 p-1.5 px-3 flex justify-end gap-5">
             <button
               class="bg-red-50 rounded  border-red-400 border-2 px-2.5 py-1.5 text-black cursor-pointer hover:bg-red-500 hover:text-white"
               on:click={() => window.alert('Button 1 Clicked')}
