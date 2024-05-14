@@ -2,7 +2,7 @@
     import { Icon } from 'svelte-icons-pack';
     // @ts-ignore - This is a false positive, the import is working fine
     import { FaSolidTriangleExclamation as modalIcon } from 'svelte-icons-pack/fa';
-    import { closeModal, modalHeader, modalText } from "../../store";
+    import { closeModal, modalHeader, modalText } from "../../../store";
 </script>
 
 <main class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen

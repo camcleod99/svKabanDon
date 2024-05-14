@@ -1,7 +1,8 @@
 <script lang="ts">
   // import { writable } from 'svelte/store';
-  import { closeModal } from '../../store.js';
+  import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
+  import { createColumn } from '../../../store/store_database.js';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FiFolderPlus as modalIcon } from 'svelte-icons-pack/fi';
 
@@ -30,6 +31,7 @@
       }
       console.log(column);
       window.alert('Submit Clicked');
+      createColumn(columnName, columnDescription, 1);
       closeModal();
       } else {
       window.alert('Please fill in all required fields');

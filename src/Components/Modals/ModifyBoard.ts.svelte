@@ -1,15 +1,25 @@
 <script lang="ts">
   // import { writable } from 'svelte/store';
-  import { closeModal } from '../../store.js';
+  import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
+  import { onMount } from 'svelte';
+  import { getSystemSettings } from '../../../store/store_database';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FiGlobe as modalIcon } from 'svelte-icons-pack/fi';
 
   // Form validation variables
   let boardName = '';
   let boardDescription = '';
-  
+
   // Get the variables for the board
+  onMount(async() => {
+   const settings = await getSystemSettings('board_name');
+   if (!settings){
+     boardName = 'Working...';
+   } else {
+     boardName = settings.value;
+   }
+  })
 
   // Error Messages
   const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only' ];

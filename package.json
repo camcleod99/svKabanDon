@@ -22,6 +22,8 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "pocketbase": "^0.21.2",
     "svelte-icons-pack": "^3.1.3"
   }
 }

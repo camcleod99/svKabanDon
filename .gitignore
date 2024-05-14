@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+* Dabase Files
+database/pb_data
+
+* Environment variables and secrets
+/dev.env
+/.env

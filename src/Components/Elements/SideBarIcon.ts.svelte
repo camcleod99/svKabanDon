@@ -1,7 +1,11 @@
 <script lang="ts">
     import { Icon, IconType } from 'svelte-icons-pack';
+
+   /** I have no idea Why this is necessary but node is not having it so sod it */
     // @ts-ignore - This is a false positive, the import is working fine
     import { AiOutlineNodeExpand } from 'svelte-icons-pack/ai';
+    // @ts-ignore - This is a false positive, the import is working fine
+    import { HiOutlineBeaker }  from 'svelte-icons-pack/hi';
     // @ts-ignore - This is a false positive, the import is working fine
     import { BsPlus, BsGearFill, BsFileText } from 'svelte-icons-pack/bs'
 
@@ -11,6 +15,7 @@
       "BsGearFill": BsGearFill,
       "BsFileText": BsFileText,
       "AiOutlineNodeExpand": AiOutlineNodeExpand,
+      "HiOutlineBeaker": HiOutlineBeaker
     }
 
     // Declare Props

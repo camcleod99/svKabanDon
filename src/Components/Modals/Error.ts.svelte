@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { closeModal, modalHeader, modalText } from "../../store";
+    import { closeModal, modalHeader, modalText } from "../../../store";
 
     import { Icon } from 'svelte-icons-pack';
 
