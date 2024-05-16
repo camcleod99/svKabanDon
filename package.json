@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "db": "./database/pocketbase serve",
     "build": "vite build",
     "preview": "vite preview"
   },

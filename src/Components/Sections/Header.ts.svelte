@@ -1,22 +1,26 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getSystemSettings } from '../../../store/store_database';
+  import { readSystemSettings } from '../../../store/store_database';
+  import { titleStore } from "../../../store/store_database";
 
   let title : string;
 
+  titleStore.subscribe(value => {
+    title = value;
+  });
+
   onMount(async() => {
     try{
-      title = 'Loading'
-      const settings = await getSystemSettings('board_name');
+      const settings = await readSystemSettings('board_name');
       if (settings){
-        title = settings.value;
+        titleStore.set(settings.value);
       } else {
         console.error('Error HEADER_ONMOUNT ln 13: No Setting Found in DB')
-        title = `ERROR : DB`;
+        titleStore.set(`ERROR: DB READ FAILED`)
     }
     } catch (e) {
       console.log(`Error HEADER_ONMOUNT ln 17: ${e}`)
-      title = "ERROR : ASYNC"
+      titleStore.set(`ERROR: ASYNC CALL FAILED`)
     }
   })
 
