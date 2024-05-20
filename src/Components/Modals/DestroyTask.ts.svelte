@@ -101,7 +101,8 @@
         on:keydown={() => {}}>
         Cancel
       </button>
-<!--      TODO: Add the call to delete the task from the database -->
+      <!--  TODO - 20 / 5 - Add the call to delete the task from the database -->
+      <!-- destroy(table, id) -->
       <button
         class="bg-red-500 rounded px-2.5 py-1.5 text-white cursor-pointer hover:bg-red-700"
         on:click={() => window.alert('PRETEND: Task Deleted')}

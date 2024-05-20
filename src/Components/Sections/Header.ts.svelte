@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { readSystemSettings } from '../../../store/store_database';
-  import { titleStore } from "../../../store/store_database";
+  import { readSystemSettings } from '../../store/store_database';
+  import { titleStore } from "../../store/store_database";
 
   let title : string;
 

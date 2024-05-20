@@ -1,6 +1,7 @@
 <script lang="ts">
-  export let name:  string = 'Name';
- export let description: string = 'Description';
+  export let id: string = "Task ID";
+  export let name: string = "Task Name";
+  export let description: string = "Task Description";
 </script>
 
 <main class="mx-auto py-2">
@@ -14,6 +15,9 @@
     </p>
     <p class="font-normal text-gray-700 dark:text-gray-400">
       {description}
+    </p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      {id}
     </p>
   </section>
 </main>

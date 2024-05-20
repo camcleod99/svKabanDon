@@ -2,7 +2,7 @@
   // import { writable } from 'svelte/store';
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
-  import { createColumn } from '../../../store/store_database.js';
+  import { createColumn } from '../../store/store_database';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FiFolderPlus as modalIcon } from 'svelte-icons-pack/fi';
 

@@ -3,8 +3,8 @@
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
   import { onMount } from 'svelte';
-  import { readSystemSettings } from '../../../store/store_database';
-  import { updateTitle } from '../../../store/store_database';
+  import { readSystemSettings } from '../../store/store_database';
+  import { updateTitle } from '../../store/store_database';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FiGlobe as modalIcon } from 'svelte-icons-pack/fi';
 
