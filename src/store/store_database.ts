@@ -5,7 +5,15 @@ const dbPassword = import.meta.env.VITE_DATABASE_PASSWORD;
 import { writable, Writable } from 'svelte/store';
 export const titleStore = writable("Waiting for PocketBase");
 export const columnsStore : Writable<[]> = writable();
-export const tasksStore : Writable<[]> = writable();
+
+interface Task {
+  name: string;
+  description: string;
+  weight: number;
+  column: string;
+}
+
+export const tasksStore : Writable<Task[]> = writable();
 
 import PocketBase, { RecordModel } from 'pocketbase';
 const pb = new PocketBase(dbUrl);
@@ -26,9 +34,9 @@ export async function createTask(name: string, description: string, weight: numb
   }
 
   const data = {
-    "Name": name,
-    "Description": description,
-    "Weight": weight,
+    "name": name,
+    "description": description,
+    "weight": weight,
     "column": column
   };
 
@@ -38,10 +46,11 @@ export async function createTask(name: string, description: string, weight: numb
     catchCode(record, 31);
   } else {
     catchSuccess(record, 'Tasks');
+    tasksStore.update(tasks => [...tasks, data]);
   }
 }
 
-export async function createColumn(name: string, description: string, position: number) {
+export async function createColumn(name: string, description: string, position: number, column: string) {
   if (!name || !description || !position) {
     const e = new Error("All fields are required");
     catchError(e, 12);
@@ -51,7 +60,7 @@ export async function createColumn(name: string, description: string, position: 
   const data = {
     "name": name,
     "description": description,
-    "position": position
+    "position": position,
   };
 
   const record = await pb.collection('columns').create(data);
@@ -73,10 +82,9 @@ export async function readSystemSettings(key: string) {
   }
 }
 
-// TODO - 20 / 5 - Make this work with sections/board so it will display the columns in
 export async function readColumns() {
   try {
-    const columns = await pb.collection('columns').getFullList()
+    const columns = await pb.collection('columns').getFullList({ requestKey: 'columns' });
     return columns;
   } catch (e: any) {
     catchError(e, 81);
@@ -120,8 +128,7 @@ export async function updateTitle(id: string, value: string) {
 // Destroy Function
 export async function destroy(table: string, id: string) {
   try {
-    // @ts-ignore TS Is being a whiney brat about this, so this is to shut it up.
-    const record : RecordModel = await pb.collection(table).delete(id);
+    const record : any = await pb.collection(table).delete(id);
     if (record.code) {
       catchCode(record, 86);
     } else {
@@ -133,7 +140,7 @@ export async function destroy(table: string, id: string) {
 }
 
 // Dehydration
-function catchError(e: Error, line: number, id?) {
+function catchError(e: Error, line: number, id?: string) {
   console.error(`ERROR IN store_database - ${line}: ${e.message} ${id ? id : ''}`);
 }
 
@@ -143,4 +150,8 @@ function catchCode(record: RecordModel, line: number){
 
 function catchSuccess(record:  RecordModel, table: string){
   console.log(`%c${table} created successfully ${record.id}`, 'color: green;');
+}
+
+export function catchFuckup(e: Error, file: string, line: number){
+  console.error(`ERROR IN ${file} - ${line}: ${e.message}`)
 }

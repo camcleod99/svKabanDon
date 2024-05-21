@@ -1,7 +1,10 @@
 <script lang="ts">
-  export let id: string = "Task ID";
-  export let name: string = "Task Name";
-  export let description: string = "Task Description";
+  // Props
+  export let id: string = "";
+  export let name: string = "";
+  export let description: string = "";
+
+  export let message: string = "";
 </script>
 
 <main class="mx-auto py-2">
@@ -9,6 +12,11 @@
       bg-white border border-gray-200 rounded-lg shadow
       hover:bg-gray-100 dark:bg-gray-800
       dark:border-gray-700 dark:hover:bg-gray-700">
+    {#if message}
+      <p class="text-red-500 dark:text-red-400">
+        {message}
+      </p>
+    {:else}
     <p class="mb-2 text-2xl
       tracking-tight font-bold text-gray-900 dark:text-gray-400">
       {name}
@@ -19,5 +27,6 @@
     <p class="text-sm text-gray-500 dark:text-gray-400">
       {id}
     </p>
+    {/if}
   </section>
 </main>

@@ -2,6 +2,9 @@
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
   import { createTask } from '../../store/store_database';
+  import { readColumns } from "../../store/store_database";
+  import { tasksStore } from "../../store/store_database";
+  import { onMount } from 'svelte';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';
 
@@ -16,6 +19,13 @@
   // Error Messages
   const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only' ];
 
+  let columns : any = [];
+  // Get columns
+  onMount(async() => {
+    columns = await readColumns();
+    console.log (columns)
+  });
+
   // Function to validate form fields
   function validateForm() {
     task_name_error = validateInput(task_name);
@@ -24,19 +34,12 @@
   }
 
   // Function to submit task
-  function submitTask() {
+  async function submitTask() {
     validateForm();
 
     // Only submit the form if there are no validation errors
     if (!task_name_error && !task_description_error) {
-      const task = {
-        task_name,
-        task_description,
-        task_column
-      }
-      console.log(task);
-      createTask(task_name, task_description, 1, 'uzgoox9s26lp3oa');
-      window.alert('Submit Clicked');
+      await createTask(task_name, task_description, 1, task_column);
       closeModal();
       } else {
       window.alert('Please fill in all required fields');
@@ -98,9 +101,9 @@
                   <label for="task_column" class="text-gray-800">Task Column <span class="text-red-500">{task_column_error}</span></label>
                   <select id="task_column" name="task_column" bind:value={task_column} class="p-2 border border-gray-400 rounded focus:outline-none focus:border-blue-500">
                     {#if task_column_error } <option value="">Select a column</option> {/if}
-                    <option value="To Do">To Do</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
+                    {#each columns as column}
+                      <option value={column.id}>{column.name}</option>
+                    {/each}
                   </select>
                 </div>
               </form>
