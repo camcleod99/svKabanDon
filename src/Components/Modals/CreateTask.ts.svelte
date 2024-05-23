@@ -1,9 +1,7 @@
 <script lang="ts">
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
-  import { createTask } from '../../store/store_database';
-  import { readColumns } from "../../store/store_database";
-  import { tasksStore } from "../../store/store_database";
+  import { createTask, readColumns } from "../../store/store_database";
   import { onMount } from 'svelte';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';

@@ -5,6 +5,9 @@
   export let description: string = "";
 
   export let message: string = "";
+
+  // import { destroy } from "../../store/store_database";
+  import { deleteTask } from "../../Controllers/tasks";
 </script>
 
 <main class="mx-auto py-2">
@@ -25,7 +28,8 @@
       {description}
     </p>
     <p class="text-sm text-gray-500 dark:text-gray-400">
-      {id}
+      <span on:click={() => deleteTask(id)} on:keydown={() => {}}>{id}</span>
+<!--      <span on:click={() => destroy("tasks",id)}>{id}</span>-->
     </p>
     {/if}
   </section>

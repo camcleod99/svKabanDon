@@ -1,8 +1,8 @@
 <script lang="ts">
-  // import { writable } from 'svelte/store';
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
-  import { createColumn } from '../../store/store_database';
+  import { createColumn, readColumns} from '../../store/store_database';
+  import { onMount } from "svelte";
   // @ts-ignore - This is a false positive, the import is working fine
   import { FiFolderPlus as modalIcon } from 'svelte-icons-pack/fi';
 
@@ -11,7 +11,17 @@
   let columnDescription = '';
 
   // Error Messages
-  const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only' ];
+  const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only', "Columns can not have duplicate names" ];
+
+  // Get Columns to prevent duplication
+  let columns : any = [];
+  let columnNames: string[] = [];
+  onMount(async() => {
+    columns = await readColumns();
+    // Get the column names
+    columnNames = columns.map((column: any) => column.name);
+    console.log(columnNames);
+  });
 
   // Function to validate form fields
   function validateForm() {
@@ -19,8 +29,8 @@
     columnDescriptionError = validateInput(columnDescription);
   }
 
-  // Function to submit task
-  function submitColumn() {
+  // Function to submit a column
+  async function submitColumn() {
     validateForm();
 
     // Only submit the form if there are no validation errors
@@ -29,9 +39,7 @@
         columnName,
         columnDescription
       }
-      console.log(column);
-      window.alert('Submit Clicked');
-      createColumn(columnName, columnDescription, 1);
+      await createColumn(columnName, columnDescription, 1);
       closeModal();
       } else {
       window.alert('Please fill in all required fields');
@@ -44,6 +52,8 @@
       return errorText[0];
     } else if (!/^[a-zA-Z0-9 ]*$/.test(input)) {
       return errorText[1];
+    } else if (columnNames.includes(input)) {
+      return errorText[2];
     } else {
       return '';
     }

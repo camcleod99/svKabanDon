@@ -22,10 +22,9 @@
       const results = await readTasksOnColumn(id);
       if ( results && JSON.stringify(results) !== JSON.stringify(tasks) ){
         tasks = [...results]
+        tasks.sort((a: any, b: any) => a.weight - b.weight);
         tasksStore.set(tasks);
         loading = false;
-      } else {
-        console.error('Error COLUMN_ONMOUNT ln 19: No Tasks Found in DB')
       }
     } catch (e) {
       console.log(`Error COLUMN_ONMOUNT ln 19: ${e}`)

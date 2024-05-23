@@ -4,15 +4,22 @@ const dbPassword = import.meta.env.VITE_DATABASE_PASSWORD;
 
 import { writable, Writable } from 'svelte/store';
 export const titleStore = writable("Waiting for PocketBase");
-export const columnsStore : Writable<[]> = writable();
+
+interface Column{
+  id: string;
+  name: string;
+  description: string;
+  position: number;
+}
+export const columnsStore : Writable<Column[]> = writable();
 
 interface Task {
+  id: string;
   name: string;
   description: string;
   weight: number;
   column: string;
 }
-
 export const tasksStore : Writable<Task[]> = writable();
 
 import PocketBase, { RecordModel } from 'pocketbase';
@@ -29,11 +36,11 @@ export async function createTask(name: string, description: string, weight: numb
   if (!name || !description || !weight || !column) {
     const e = new Error("All fields are required");
     catchError(e, 12);
-    // TODO - LATER - Send Error to UI
     return
   }
 
-  const data = {
+  const data : {id: string, name: string, description: string, weight: number, column: string} = {
+    "id": "",
     "name": name,
     "description": description,
     "weight": weight,
@@ -46,11 +53,13 @@ export async function createTask(name: string, description: string, weight: numb
     catchCode(record, 31);
   } else {
     catchSuccess(record, 'Tasks');
+    const inputID = record.id;
+    data.id = inputID;
     tasksStore.update(tasks => [...tasks, data]);
   }
 }
 
-export async function createColumn(name: string, description: string, position: number, column: string) {
+export async function createColumn(name: string, description: string, position: number) {
   if (!name || !description || !position) {
     const e = new Error("All fields are required");
     catchError(e, 12);
@@ -58,17 +67,19 @@ export async function createColumn(name: string, description: string, position: 
   }
 
   const data = {
+    "id": "",
     "name": name,
     "description": description,
     "position": position,
   };
 
   const record = await pb.collection('columns').create(data);
-
   if (record.code) {
     catchCode(record, 50);
   } else {
-    catchSuccess(record, 'Tasks');
+    catchSuccess(record, 'Columns');
+    data.id = record.id;
+    columnsStore.update(columns => [...columns, data]);
   }
 }
 
@@ -131,6 +142,14 @@ export async function destroy(table: string, id: string) {
     const record : any = await pb.collection(table).delete(id);
     if (record.code) {
       catchCode(record, 86);
+      switch (table) {
+        case 'columns':
+          columnsStore.update(columns => columns.filter(column => column.id !== id));
+          break;
+        case 'tasks':
+          tasksStore.update(tasks => tasks.filter(task => task.id !== id));
+          break;
+      }
     } else {
       catchSuccess(record, table);
     }
@@ -138,6 +157,8 @@ export async function destroy(table: string, id: string) {
     catchError(e, 91);
   }
 }
+
+
 
 // Dehydration
 function catchError(e: Error, line: number, id?: string) {
