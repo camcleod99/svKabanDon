@@ -15,7 +15,8 @@ export async function setupDB(): Promise<PocketBase | null>{
     return null;
   }
 
-  catchPBSuccess(undefined, "controllers_database", 17, "PocketBase", "initialized")
+  const dummyRecord = {"id": "", "code": 0, "message": "", collectionId: "", collectionName: "", created: "", updated: "",};
+  catchPBSuccess(dummyRecord, "controllers_database", 17, "PocketBase", "initialized")
   return pb;
 }
 

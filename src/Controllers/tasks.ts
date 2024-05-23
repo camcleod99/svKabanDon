@@ -78,7 +78,7 @@ export async function readOneTask(id: string) {
 
 //Update
 
-//Destroy
+//Delete
 export async function deleteTask(id: string){
   const pbInstance = await pb;
   if (!pbInstance) {

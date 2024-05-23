@@ -63,8 +63,8 @@ export async function readColumns() {
 
 //Update
 
-//Destroy
-export async function deleteTask(id: string){
+//Delete
+export async function deleteColumn(id: string){
   const pbInstance = await pb;
   if (!pbInstance) {
     return;
