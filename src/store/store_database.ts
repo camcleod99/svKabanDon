@@ -4,6 +4,8 @@ const dbUser = import.meta.env.VITE_DATABASE_USER;
 const dbPassword = import.meta.env.VITE_DATABASE_PASSWORD;
 
 import { writable, Writable } from 'svelte/store';
+
+import { catchError } from '../Controllers/errors';
 export const titleStore = writable("Waiting for PocketBase");
 
 interface Column{
@@ -35,7 +37,7 @@ try {
 // Create Functions
 export async function createTask(name: string, description: string, weight: number, column: string) {
   if (!name || !description || !weight || !column) {
-    const e = new Error("All fields are required");
+    const e = new Error("User Input Error: All fields are required");
     catchError(e, 12);
     return
   }
@@ -90,7 +92,7 @@ export async function readSystemSettings(key: string) {
     const settings = await pb.collection('system').getFirstListItem(`key="${key}"`);
     return settings;
   } catch (e: any) {
-    catchError(e, 62);
+    catchError(e, 'store_database_readSystemSettings');
   }
 }
 
@@ -99,7 +101,7 @@ export async function readColumns() {
     const columns = await pb.collection('columns').getFullList({ requestKey: 'columns' });
     return columns;
   } catch (e: any) {
-    catchError(e, 81);
+    catchError(e, 'store_database_readColumns');
   }
 }
 
@@ -108,7 +110,7 @@ export async function readTasksOnColumn(id: string) {
     const tasks = await pb.collection('tasks').getFullList( { filter: `column.id = "${id}"`, requestKey: `${id}` } );
     return tasks;
   } catch (e: any) {
-    catchError(e, 90, id);
+    catchError(e, 'store_database_readTasksOnColumn');
   }
 }
 
@@ -117,7 +119,7 @@ export async function readTask(id: any) {
     const task = await pb.collection('tasks').getFirstListItem(`id="${id}"`)
     return task;
   } catch (e: any) {
-    catchError(e, 99);
+    catchError(e, 'store_database_readTask');
   }
 }
 
@@ -133,7 +135,7 @@ export async function updateTitle(id: string, value: string) {
       titleStore.set(value);
     }
   } catch (e: any) {
-    catchError(e, 81);
+    catchError(e, 'store_database_updateTitle');
   }
 }
 
@@ -162,10 +164,6 @@ export async function destroy(table: string, id: string) {
 
 
 // Dehydration
-function catchError(e: Error, line: number, id?: string) {
-  console.error(`ERROR IN store_database - ${line}: ${e.message} ${id ? id : ''}`);
-}
-
 function catchCode(record: RecordModel, line: number){
   console.error(`DATABASE ERROR in store_database - ${line} : ${record.code} - ${record.message}`);
 }

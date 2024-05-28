@@ -1,11 +1,11 @@
 import PocketBase from "pocketbase";
 import { writable, Writable } from 'svelte/store';
 import { setupDB } from "./database";
-import { catchError, catchPBError, catchPBSuccess } from "../Scripts/functions";
+import { catchError, catchPBError, catchPBSuccess } from "./errors";
 
 const pb : Promise<PocketBase | null> = setupDB()
 let customError = new Error();
-interface Task{
+export interface Task{
   id: string;
   name: string;
   description: string;
@@ -13,14 +13,30 @@ interface Task{
   column: string;
 }
 
-export const tasksStore : Writable<Task[]> = writable();
+export const tasksStore : Writable<Task[]> = writable([]);
+
+export async function initTasks() {
+  const pbInstance = await pb;
+  if (!pbInstance) {
+    return;
+  }
+
+  try {
+    const tasks : Array<Task> = await pbInstance.collection('tasks').getFullList({ requestKey: 'initT' });
+    tasksStore.set(tasks);
+    return true;
+  }
+  catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+}
 
 //Create
 export async function createTask(name: string, description: string, weight: number, column: string) {
   if (!name || !description || !weight || !column) {
     customError.name = "Missing Fields";
     customError.message = "All fields are required";
-    catchError(customError, "controllers_tasks", 23);
+    catchError(customError, "controllers_tasks");
     return
   }
 
@@ -58,7 +74,7 @@ export async function readTasksInColumn(id: string) {
   try {
     return await pbInstance.collection('tasks').getFullList( { filter: `column.id = "${id}"`, requestKey: `${id}` } );
   } catch (e: any) {
-    catchError(e, "Storage_tasks", 63);
+    catchError(e, "Storage_tasks");
   }
 }
 
@@ -72,7 +88,20 @@ export async function readOneTask(id: string) {
   try {
     return await pbInstance.collection('tasks').getFirstListItem(`id="${id}"`, { requestKey: id })
   } catch (e: any) {
-    catchError(e, "Storage_tasks", 65);
+    catchError(e, "Storage_tasks");
+  }
+}
+
+export async function readTasks() {
+  const pbInstance = await pb;
+  if (!pbInstance) {
+    return;
+  }
+
+  try {
+    return await pbInstance.collection('tasks').getFullList();
+  } catch (e: any) {
+    catchError(e, "Storage_tasks");
   }
 }
 
@@ -94,7 +123,7 @@ export async function deleteTask(id: string){
       tasksStore.update(tasks => tasks.filter(task => task.id !== id));
     }
   } catch (e: any) {
-    catchError(e, "controllers_tasks", 96);
+    catchError(e, "controllers_tasks");
   }
 }
 

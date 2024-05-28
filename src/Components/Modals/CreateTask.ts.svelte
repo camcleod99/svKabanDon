@@ -1,7 +1,8 @@
 <script lang="ts">
   import { closeModal } from '../../../store.js';
   import { Icon } from 'svelte-icons-pack';
-  import { createTask, readColumns } from "../../store/store_database";
+  import { createTask } from "../../Controllers/tasks";
+  import { readColumns } from "../../Controllers/columns";
   import { onMount } from 'svelte';
   // @ts-ignore - This is a false positive, the import is working fine
   import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';
@@ -21,7 +22,6 @@
   // Get columns
   onMount(async() => {
     columns = await readColumns();
-    console.log (columns)
   });
 
   // Function to validate form fields

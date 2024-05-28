@@ -1,40 +1,31 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  // Controllers
+  import { Task as TasksInterface, tasksStore } from "../../Controllers/tasks";
   // Components
   import Task from './Task.ts.svelte';
   import Divider from '../Elements/Divider.ts.svelte';
-  import {readTasksOnColumn, tasksStore} from "../../store/store_database";
-  import {onMount} from "svelte";
 
-  // Props
+  // Props (Columns)
   export let name: string;
   export let description: string;
   export let id: string;
 
-  let tasks : any = [];
+  // System Vars
   let loading = true;
+  let tasks : TasksInterface[] = [];
 
-  // loadColumn
-  const loadColumn = async() => {
-    if(!id){
-      return
-    }
-    try{
-      const results = await readTasksOnColumn(id);
-      if ( results && JSON.stringify(results) !== JSON.stringify(tasks) ){
-        tasks = [...results]
-        tasks.sort((a: any, b: any) => a.weight - b.weight);
-        tasksStore.set(tasks);
-        loading = false;
-      }
-    } catch (e) {
-      console.log(`Error COLUMN_ONMOUNT ln 19: ${e}`)
-    }
-  }
+  // Lifecycle Hook
+  onMount(async() => {
+    tasksStore.subscribe((value) => {
+      tasks = value.filter((task: TasksInterface) => task.column === id);
+    });
+    loading = false;
+  })
 
-  onMount(loadColumn);
-
-  tasksStore.subscribe(() => {
-    loadColumn();
+  // Store Subscription
+  tasksStore.subscribe((value) =>{
+    tasks = value.filter((task: any) => task.column === id);
   });
 
 </script>
@@ -53,12 +44,16 @@
     </header>
     <Divider/>
     <section class="flex flex-col">
-      {#if tasks.length > 0}
-        {#each tasks as task}
+      {#if !loading}
+        {#if tasks.length > 0}
+          {#each tasks as task}
             <Task name={task.name} description={task.description} id={task.id} />
-        {/each}
-      {:else}
+          {/each}
+        {:else}
           <Task message="There are no tasks in this column"/>
+        {/if}
+      {:else}
+        <Task message="Loading Tasks..."/>
       {/if}
     </section>
 </main>

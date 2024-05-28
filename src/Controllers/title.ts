@@ -1,7 +1,7 @@
 import PocketBase from "pocketbase";
 import { writable } from "svelte/store";
 import { setupDB } from "./database";
-import { catchError, catchPBError, catchPBSuccess } from "../Scripts/functions";
+import { catchError, catchPBError, catchPBSuccess } from "./errors";
 export const titleStore = writable("[DEFAULT TITLE]");
 
 const pb : Promise<PocketBase | null> = setupDB()

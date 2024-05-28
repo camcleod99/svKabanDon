@@ -1,34 +1,26 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { readColumns, columnsStore} from "../../store/store_database"
+  // Controllers
+  import { Column as ColumnInterface, columnsStore } from "../../Controllers/columns"
+  // Components
   import Column from "../Content/Column.ts.svelte";
   import Task from "../Content/Task.ts.svelte";
 
+  // System Vars
   let loading = true;
-  let columns : any = [];
+  let columns: ColumnInterface[] = [];
 
-  const loadBoard = async() => {
-    try{
-      const results = await readColumns();
-      if ( results && JSON.stringify(results) !== JSON.stringify(columns) ){
-        columns = [...results]
-        // Sort the columns by their position
-        // This does not have a practical use yet but now's better than later
-        columns.sort((a: any, b: any) => a.position - b.position);
-        columnsStore.set(columns);
-        loading = false;
-      } else {
-        console.error('There are no columns in the database')
-      }
-    } catch (e) {
-      console.log(`Error HEADER_ONMOUNT ln 19: ${e}`)
-    }
-  }
+  // Lifecycle Hook
+  onMount(() => {
+    columnsStore.subscribe((value) => {
+      columns = value.map((column: ColumnInterface) => column);
+    });
+    loading = false;
+  });
 
-  onMount(loadBoard);
-
-  columnsStore.subscribe(() => {
-    loadBoard();
+  // Store Subscription
+  columnsStore.subscribe((value) => {
+    columns = value.map((column: any) => column);
   });
 
 </script>
@@ -44,7 +36,7 @@
         {/each}
       {/if}
     {:else}
-        <p>Loading Columns...</p>
+        <Task message="Loading Columns..."/>
     {/if}
   </section>
 </main>

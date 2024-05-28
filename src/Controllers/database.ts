@@ -1,5 +1,5 @@
 import PocketBase from "pocketbase";
-import { catchError, catchPBSuccess } from "../Scripts/functions";
+import { catchError, catchPBSuccess } from "./errors";
 
 const dbUrl = import.meta.env.VITE_DATABASE_URL;
 const dbUser = import.meta.env.VITE_DATABASE_USER;
@@ -11,7 +11,7 @@ export async function setupDB(): Promise<PocketBase | null>{
   try {
     await pb.admins.authWithPassword(dbUser, dbPassword)
   } catch (e: any) {
-    catchError(e, "controllers_database", 13);
+    catchError(e, "controllers_database_setupDB");
     return null;
   }
 
@@ -19,4 +19,3 @@ export async function setupDB(): Promise<PocketBase | null>{
   catchPBSuccess(dummyRecord, "controllers_database", 17, "PocketBase", "initialized")
   return pb;
 }
-

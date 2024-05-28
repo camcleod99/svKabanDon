@@ -1,7 +1,11 @@
 import {RecordModel} from "pocketbase";
 
-export function catchError(e: Error, location:string, line: number, id?: string) {
-  console.error(`ERROR: ${location} - ${line}: ${e.message} ${id ? id : ''}`);
+export function catchError(e: Error, location:string) {
+  console.error(`ERROR: ${location} - ${location}: ${e}}`);
+}
+
+export function catchCustomError(message: string, location: string){
+  console.error(`ERROR: ${location}: ${message}`);
 }
 
 export function catchPBError(record: RecordModel, location:string, line: number){

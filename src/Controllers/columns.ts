@@ -1,25 +1,41 @@
 import PocketBase from "pocketbase";
 import { writable, Writable } from 'svelte/store';
 import { setupDB } from "./database";
-import { catchError, catchPBError, catchPBSuccess } from "../Scripts/functions";
+import { catchError, catchPBError, catchPBSuccess } from "./errors";
 
 const pb : Promise<PocketBase | null> = setupDB()
 let customError = new Error();
-interface Column{
+export interface Column{
   id: string;
   name: string;
   description: string;
   position: number;
 }
 
-export const columnsStore : Writable<Column[]> = writable();
+export const columnsStore : Writable<Column[]> = writable([]);
+
+export async function initColumns() {
+  const pbInstance = await pb;
+  if (!pbInstance) {
+    return;
+  }
+
+  try {
+    const columns : Array<Column> = await pbInstance.collection('columns').getFullList({ requestKey: 'initC' });
+    columnsStore.set(columns);
+    return true;
+  } catch (e: any) {
+    catchError(e, "controllers_columns");
+  }
+
+}
 
 //Create
 export async function createColumn(name: string, description: string, position: number) {
   if (!name || !description || !position) {
     customError.name = "Missing Fields";
     customError.message = "All fields are required";
-    catchError(customError, "controllers_columns", 23);
+    catchError(customError, "controllers_columns");
     return
   }
 
@@ -57,7 +73,7 @@ export async function readColumns() {
     const columns = await pbInstance.collection('columns').getFullList({ requestKey: 'columns' });
     return columns;
   } catch (e: any) {
-    catchError(customError, "controllers_columns", 23);
+    catchError(e, "controllers_columns");
   }
 }
 
@@ -79,7 +95,7 @@ export async function deleteColumn(id: string){
       columnsStore.update(columns => columns.filter(column => column.id !== id));
     }
   } catch (e: any) {
-    catchError(e, "controllers_columns", 96);
+    catchError(e, "controllers_columns");
   }
 }
 
