@@ -121,6 +121,7 @@ export async function deleteTask(id: string){
     } else {
       catchPBSuccess(record, "controllers_tasks", 92, "task deleted");
       tasksStore.update(tasks => tasks.filter(task => task.id !== id));
+      return true;
     }
   } catch (e: any) {
     catchError(e, "controllers_tasks");
