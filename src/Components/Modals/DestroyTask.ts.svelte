@@ -1,8 +1,9 @@
+<!-- TODO 31/5: IMPLEMENT THIS FUNCTION -->
 <script lang="ts">
   // import { writable } from 'svelte/store';
-  import {closeModal} from '../../../store.js';
+  import {closeModal} from '../../Controllers/modal';
   import {Icon} from 'svelte-icons-pack';
-  // @ts-ignore - This is a false positive, the import is working fine
+  // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
   import { FaSolidBomb as modalIcon } from 'svelte-icons-pack/fa';
 
   // Form validation variables
@@ -101,7 +102,7 @@
         on:keydown={() => {}}>
         Cancel
       </button>
-      <!--  TODO - 20 / 5 - Add the call to delete the task from the database -->
+      <!-- TODO 31/5: IMPLEMENT THIS CALL -->
       <!-- destroy(table, id) -->
       <button
         class="bg-red-500 rounded px-2.5 py-1.5 text-white cursor-pointer hover:bg-red-700"

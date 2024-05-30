@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { closeModal } from '../../../store.js';
+    import { closeModal } from '../../Controllers/modal';
     import { Icon } from 'svelte-icons-pack';
-    // @ts-ignore - This is a false positive, the import is working fine
+    // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
     import { FaNoteSticky as modalIcon } from 'svelte-icons-pack/fa';
 </script>
 

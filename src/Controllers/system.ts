@@ -2,9 +2,25 @@ import PocketBase from "pocketbase";
 import { writable } from "svelte/store";
 import { setupDB } from "./database";
 import { catchError, catchPBError, catchPBSuccess } from "./errors";
-export const titleStore = writable("[DEFAULT TITLE]");
 
 const pb : Promise<PocketBase | null> = setupDB()
+
+export const titleStore = writable("");
+
+// Read System Setting
+export async function readSettings(key: string) {
+  const pbInstance = await pb;
+  if (!pbInstance) {
+    return;
+  }
+
+  try {
+    const settings = await pbInstance.collection('system').getFirstListItem(`key="${key}"`);
+    return settings;
+  } catch (e: any) {
+    catchError(e, 'controllers_system_readSystemSettings');
+  }
+}
 
 // Update Title
 export async function updateTitle(id: string, value: string) {
@@ -22,6 +38,6 @@ export async function updateTitle(id: string, value: string) {
       titleStore.set(value);
     }
   } catch (e: any) {
-    catchError(e, "controllers_title", 23);
+    catchError(e, "controllers_title_updateTitle");
   }
 }

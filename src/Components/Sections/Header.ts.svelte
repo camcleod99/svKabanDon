@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { readSystemSettings } from '../../store/store_database';
-  import { titleStore } from "../../store/store_database";
+  // Controllers
+  import { titleStore, readSettings } from "../../Controllers/system"
+  // import { readSystemSettings } from '../../store/store_database';
+  // import { titleStore } from "../../store/store_database";
 
   let title : string;
 
@@ -11,7 +13,7 @@
 
   onMount(async() => {
     try{
-      const settings = await readSystemSettings('board_name');
+      const settings = await readSettings('board_name');
       if (settings){
         titleStore.set(settings.value);
       } else {

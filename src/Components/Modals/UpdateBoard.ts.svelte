@@ -1,30 +1,30 @@
 <script lang="ts">
-  // import { writable } from 'svelte/store';
-  import { closeModal } from '../../../store.js';
-  import { Icon } from 'svelte-icons-pack';
   import { onMount } from 'svelte';
-  import { readSystemSettings } from '../../store/store_database';
-  import { updateTitle } from '../../store/store_database';
-  // @ts-ignore - This is a false positive, the import is working fine
+  import { Icon } from 'svelte-icons-pack';
+  import { closeModal } from '../../Controllers/modal';
+  import { readSettings, updateTitle } from '../../Controllers/system';
+  // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
   import { FiGlobe as modalIcon } from 'svelte-icons-pack/fi';
 
   // Form validation variables
   let boardName = '';
+  let oldBoardName = '';
   let boardID = '';
 
   // Get the variables for the board
   onMount(async() => {
-   const settings = await readSystemSettings('board_name');
+   const settings = await readSettings('board_name');
    if (!settings){
-     boardName = 'Working...';
+     boardName = '⚠️️ No Board Name Found in DB';
    } else {
      boardName = settings.value;
+     oldBoardName = settings.value;
      boardID = settings.id;
    }
   })
 
   // Error Messages
-  const errorText  = [ 'required', 'invalid - A-Z, a-z, 0-9, and space only' ];
+  const errorText  = [ 'required', 'Letters, Numbers, and Space only', 'Same as old Name' ];
 
   // Function to validate form fields
   function validateForm() {
@@ -51,6 +51,8 @@
       return errorText[0];
     } else if (!/^[a-zA-Z0-9' ]*$/.test(input)) {
       return errorText[1];
+    } else if (input === oldBoardName){
+      return errorText[2];
     } else {
       return '';
     }

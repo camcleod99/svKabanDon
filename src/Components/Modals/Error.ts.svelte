@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { closeModal, modalHeader, modalText } from "../../../store";
+    import { closeModal, modalHeader, modalText } from "../../Controllers/modal";
 
     import { Icon } from 'svelte-icons-pack';
 
-    // @ts-ignore - This is a false positive, the import is working fine
+    // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
     import { FaSolidExclamation as modalIcon } from 'svelte-icons-pack/fa';
 </script>
 

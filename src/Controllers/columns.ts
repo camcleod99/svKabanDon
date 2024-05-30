@@ -80,6 +80,7 @@ export async function readColumns() {
 //Update
 
 //Delete
+//TODO 31/5: IMPLEMENT THIS FUNCTION
 export async function deleteColumn(id: string){
   const pbInstance = await pb;
   if (!pbInstance) {

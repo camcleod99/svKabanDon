@@ -1,7 +1,7 @@
 <script lang="ts">
   import SideBarIcon from "../Elements/SideBarIcon.ts.svelte";
   import Divider from '../Elements/Divider.ts.svelte';
-  import { activeModal, modalHeader, modalText} from "../../../store";
+  import { activeModal, modalHeader, modalText} from "../../Controllers/modal";
 
   function setModal(modal: string = "Default", header: string = "Deftauly", body: string = "Default" ){
     $activeModal = modal;

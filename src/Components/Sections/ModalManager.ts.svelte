@@ -1,12 +1,11 @@
 <script lang="ts">
- // Import Global Props
- import {activeModal, modalHeader, modalText} from '../../../store.js';
- function setModal(modal: string = "Default", header: string = "Deftauly", body: string = "Default" ){
-   $activeModal = modal;
-   $modalHeader = header;
-   $modalText = body;
-   return true;
- }
+  import {activeModal, modalHeader, modalText} from '../../Controllers/modal';
+  function setModal(modal: string = "Default", header: string = "Default", body: string = "Default" ){
+    $activeModal = modal;
+    $modalHeader = header;
+    $modalText = body;
+    return true;
+  }
 </script>
 
 <main>

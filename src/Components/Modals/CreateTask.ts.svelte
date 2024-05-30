@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { closeModal } from '../../../store.js';
+  import { onMount } from 'svelte';
   import { Icon } from 'svelte-icons-pack';
+  // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
+  import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';
+  import { closeModal } from '../../Controllers/modal';
   import { createTask } from "../../Controllers/tasks";
   import { readColumns } from "../../Controllers/columns";
-  import { onMount } from 'svelte';
-  // @ts-ignore - This is a false positive, the import is working fine
-  import { FaSolidPlus as modalIcon } from 'svelte-icons-pack/fa';
 
   // Form validation variables
   let task_name = '';
@@ -31,7 +31,7 @@
     task_column_error = validateInput(task_column);
   }
 
-  // Function to submit task
+  // Function to submit a task
   async function submitTask() {
     validateForm();
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { closeModal } from '../../../store.js';
-  import { Icon } from 'svelte-icons-pack';
-  import { createColumn, readColumns} from '../../Controllers/columns';
   import { onMount } from "svelte";
-  // @ts-ignore - This is a false positive, the import is working fine
+  import { createColumn, readColumns} from '../../Controllers/columns';
+  import { closeModal } from '../../Controllers/modal';
+  import { Icon } from 'svelte-icons-pack';
+  // @ts-ignore - This is a false positive endemic to svelte-icons-pack. The import is working fine
   import { FiFolderPlus as modalIcon } from 'svelte-icons-pack/fi';
 
   // Form validation variables
@@ -18,9 +18,7 @@
   let columnNames: string[] = [];
   onMount(async() => {
     columns = await readColumns();
-    // Get the column names
     columnNames = columns.map((column: any) => column.name);
-    console.log(columnNames);
   });
 
   // Function to validate form fields
@@ -35,10 +33,6 @@
 
     // Only submit the form if there are no validation errors
     if (!columnNameError && !columnDescriptionError) {
-      const column = {
-        columnName,
-        columnDescription
-      }
       await createColumn(columnName, columnDescription, 1);
       closeModal();
       } else {
