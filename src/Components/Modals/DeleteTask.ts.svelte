@@ -41,14 +41,13 @@
 </script>
 
 <main id="modal_destroy"
-      class="glass z-100 fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
-      flex justify-center items-center"
+      class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
+      flex justify-center items-center z-50"
       on:click={() => closeModal()}
       on:keydown={() => {}}>
   <div class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
        on:click={event => event.stopPropagation()}
        on:keydown={() => {}}>
-
     <div class="flex p-4 gap-4 pb-0">
       <div class="bg-red-200 rounded-full text-red-600 w-[50px] h-[50px]
                  p-2.5 m-2.5 mt-0 flex items-center justify-center">

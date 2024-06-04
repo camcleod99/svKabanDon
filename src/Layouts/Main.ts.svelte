@@ -5,11 +5,11 @@
     import ModalManager from "../Components/Sections/ModalManager.ts.svelte";
 </script>
 
-<main id="layout_main">
+<main id="layout_main" class="h-screen w-screen">
   <ModalManager />
-  <Header />
-  <section>
-    <Sidebar/>
-    <Board/>
+  <section class="fixed w-full">
+    <Sidebar />
+    <Header />
+    <Board />
   </section>
 </main>

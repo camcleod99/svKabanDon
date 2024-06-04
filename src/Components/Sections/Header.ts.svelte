@@ -2,8 +2,14 @@
   import { onMount } from 'svelte';
   // Controllers
   import { titleStore, readSettings } from "../../Controllers/system"
+  import { activeModal, modalHeader, modalText} from "../../Controllers/modal";
   // import { readSystemSettings } from '../../store/store_database';
   // import { titleStore } from "../../store/store_database";
+  function setModal(modal: string = "Default", header: string = "Default", body: string = "Default" ){
+    $activeModal = modal;
+    $modalHeader = header;
+    $modalText = body;
+  }
 
   let title : string;
 
@@ -29,8 +35,8 @@
 
 </script>
 
-<main id="section_Header" class="fixed flex top-0 left-16 h-16 align-middle w-screen bg-green-400 ">
+<main id="section_Header" class="flex h-16 align-middle w-screen bg-green-400 ">
   <header>
-    <p class="text-4xl p-2">{title}</p>
+    <p on:click={() => setModal('UpdateBoard')} class="text-4xl p-2">{title}</p>
   </header>
 </main>

@@ -1,3 +1,3 @@
 <main>
-  <hr class="sidebar-hr" />
+  <hr/>
 </main>

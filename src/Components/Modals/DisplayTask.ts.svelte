@@ -7,7 +7,7 @@
 
 <main id="modal_task"
       class="fixed left-0 top-0 bg-gray-700 bg-opacity-50 w-screen h-screen
-      flex justify-center items-center"
+      flex justify-center items-center z-50"
       on:click={() => closeModal()}
       on:keydown={() => {}}>
     <div class="bg-gray-200 rounded shadow-md w-[40%] flex gap-5 flex-col overflow-hidden"
