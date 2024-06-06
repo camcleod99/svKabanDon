@@ -2,10 +2,9 @@ import PocketBase from "pocketbase";
 import { writable, Writable } from 'svelte/store';
 import { setupDB } from "./database";
 import { catchError, catchPBError, catchPBSuccess } from "./errors";
-import { tasksStore } from "./tasks";
+import { setUpTasks } from "./tasks";
 
 const pb : Promise<PocketBase | null> = setupDB()
-let customError = new Error();
 export interface Column{
   id?: string;
   name: string;
@@ -22,52 +21,58 @@ export async function setUpColumns() {
     return;
   }
 
-  const columns:Array<Column> = [{
-      name: "One",
-      description: "First Column",
-      position: 1,
-      limit: 0,
-    },
-    {
-      name: "Two",
-      description: "Second Column",
-      position: 2,
-      limit: 0,
-    },
-    {
-      name: "Three",
-      description: "Third Column",
-      position: 3,
-      limit: 0,
-    },
-    {
-      name: "Four",
-      description: "Fourth Column",
-      position: 4,
-      limit: 0,
-    },
-    {
-      name: "Five",
-      description: "Fifth Column",
-      position: 5,
-      limit: 0,
-    }
-  ]
-
+  // Delete all current columns
   try {
-    for (const column of columns) {
-      const result = await pbInstance.collection('columns').create(column);
-      if (result.code) {
-        catchPBError(result, "controllers_columns", 46);
-      } else {
-        catchPBSuccess(result, "controllers_columns", 48, "column created");
-        column.id = result.id;
+    const columns : Array<Column> = await pbInstance.collection('columns').getFullList();
+    if (columns.length === 0) {
+      return;
+    } else {
+      for (let column of columns) {
+        try {
+          if (!column.id) {
+            return;
+          }
+          const record: any = await pbInstance.collection('columns').delete(column.id);
+          if (record.code) {
+            catchPBError(record, "controllers_columns", 17);
+          } else {
+            catchPBSuccess(record, "controllers_columns", 19, "column deleted");
+            columnsStore.update(columns => columns.filter(c => c.id !== column.id));
+          }
+        } catch (e: any) {
+          catchError(e, "controllers_columns");
+        }
       }
     }
   } catch (e: any) {
     catchError(e, "controllers_columns");
   }
 
+  // Create the Columns and call the setUpTasks function
+  try {
+    // A for loop that creates five columns with the names One, Two, Three,
+    // Four, and Five and a description with the number of the column
+    for (let i = 1; i < 6; i++) {
+      const data: { id: string, name: string, description: string, position: number, limit: number } = {
+        "id": "",
+        "name": `Column ${i}`,
+        "description": `Column number ${i}`,
+        "position": i,
+        "limit": 5
+      }
+      const record = await pbInstance.collection('columns').create(data);
+      if (record.code) {
+        catchPBError(record, "controllers_columns", 46);
+      } else {
+        catchPBSuccess(record, "controllers_columns", 48, "column created");
+        data.id = record.id;
+        columnsStore.update(columns => [...columns, data]);
+      }
+    }
+    await setUpTasks()
+  } catch (e: any) {
+    catchError(e, "controllers_columns");
+  }
 }
 
 export async function initColumns() {
@@ -97,8 +102,7 @@ export async function readColumns() {
   }
 
   try {
-    const columns = await pbInstance.collection('columns').getFullList({ requestKey: 'columns' });
-    return columns;
+    return await pbInstance.collection('columns').getFullList({ requestKey: 'columns' });
   } catch (e: any) {
     catchError(e, "controllers_columns");
   }
@@ -111,9 +115,7 @@ export async function readOneColumn(id: string) {
   }
 
   try {
-    console.log(id)
-    const column = await pbInstance.collection('columns').getFirstListItem(`id = "${id}"`);
-    return column;
+    return await pbInstance.collection('columns').getFirstListItem(`id = "${id}"`);
   } catch (e: any) {
     catchError(e, "controllers_columns");
   }

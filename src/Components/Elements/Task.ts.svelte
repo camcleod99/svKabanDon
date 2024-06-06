@@ -25,11 +25,11 @@
           {message}
         </p>
       {:else}
-        <span class="flex justify-between">
-          <div class="text-2xl font-bold">{name}</div>
+        <section class="flex justify-between">
+          <div class="text-2xl font-bold cursor-pointer" on:click={()=> setModal('RenameTask', id)} on:keydown={()=>{}}>{name}</div>
           <div class="text-red-600 size-2 cursor-pointer" on:click={() => setModal('DeleteTask',id)} on:keydown={() => {}}>x</div>
-        </span>
-      <p>{description}</p>
+        </section>
+      <p class="cursor-pointer" on:click={() => setModal('DescribeTask', id)} on:keydown={()=>{}}>{description}</p>
       {/if}
     </div>
   </div>
