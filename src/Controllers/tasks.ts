@@ -117,7 +117,7 @@ export async function createTask(name: string, description: string, weight: numb
     "id": "",
     "name": name,
     "description": description,
-    "weight": 1,
+    "weight": -1,
     "column": column
   };
 
@@ -133,6 +133,50 @@ export async function createTask(name: string, description: string, weight: numb
   } catch (e: any) {
     catchError(e, "controllers_tasks");
   }
+
+  // Let's import the bit from "move task" because bollucks to that
+  let tasks : Array<Task> = [];
+  try {
+    tasks = await pbInstance.collection('tasks').getFullList( { filter: `column="${column}"`, requestKey: 'createT' });
+    tasks.sort((a, b) => a.weight - b.weight);
+    console.log(tasks)
+  }
+  catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+
+  // Loop through the sorted tasks and update their weight to be in order
+  for (let i = 0; i < tasks.length; i++) {
+    try {
+      const reorderResult = await pbInstance.collection('tasks').update(tasks[i].id, { weight: i+1 });
+      const newItem = await pbInstance.collection('tasks').getFirstListItem(`id="${tasks[i].id}"`);
+    } catch (e: any) {
+      catchError(e, "controllers_tasks");
+    }
+    // update the store to update the task's weight
+    tasksStore.update(tasks => {
+      const index = tasks.findIndex(task => task.id === data.id);
+      tasks[index].weight = (i+1);
+      return tasks;
+    });
+  }
+
+  // Find all the tasks in the new column, which is now sorted and update the store
+  try {
+    const newColumnResult = await pbInstance.collection('tasks').getFullList( { filter: `column="${column}"`, requestKey: 'moveT' });
+    // Go Through the newColumnResult and update the task in the store completely
+    for (let task of newColumnResult) {
+      tasksStore.update(tasks => {
+        const index = tasks.findIndex(t => t.id === task.id);
+        // @ts-ignore - This works, fuck off.
+        tasks[index] = task;
+        return tasks;
+      });
+    }
+  } catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+
 }
 
 //Read
