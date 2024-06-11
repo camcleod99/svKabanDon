@@ -1,7 +1,7 @@
 import PocketBase from "pocketbase";
 import { writable, Writable } from 'svelte/store';
 import { setupDB } from "./database";
-import { catchError, catchPBError, catchPBSuccess } from "./errors";
+import { catchError, catchPBError } from "./errors";
 import { setUpTasks } from "./tasks";
 
 const pb : Promise<PocketBase | null> = setupDB()
@@ -36,7 +36,6 @@ export async function setUpColumns() {
           if (record.code) {
             catchPBError(record, "controllers_columns", 17);
           } else {
-            catchPBSuccess(record, "controllers_columns", 19, "column deleted");
             columnsStore.update(columns => columns.filter(c => c.id !== column.id));
           }
         } catch (e: any) {
@@ -64,7 +63,6 @@ export async function setUpColumns() {
       if (record.code) {
         catchPBError(record, "controllers_columns", 46);
       } else {
-        catchPBSuccess(record, "controllers_columns", 48, "column created");
         data.id = record.id;
         columnsStore.update(columns => [...columns, data]);
       }
@@ -139,7 +137,6 @@ export async function renameColumn(id: string, name: string) {
         columns[index].name = name;
         return columns;
       });
-      catchPBSuccess(result, "controllers_columns", 48, "column updated");
     }
   } catch (e: any) {
     catchError(e, "controllers_columns");
@@ -162,7 +159,6 @@ export async function describeColumn(id: string, description: string) {
         columns[index].description = description;
         return columns;
       });
-      catchPBSuccess(result, "controllers_columns", 48, "column updated");
     }
   } catch (e: any) {
     catchError(e, "controllers_columns");

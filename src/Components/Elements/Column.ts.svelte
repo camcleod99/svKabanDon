@@ -11,7 +11,6 @@
   export let name: string;
   export let description: string;
   export let limit: number;
-
   export let id: string;
 
   // System Vars
@@ -23,14 +22,16 @@
     tasksStore.subscribe((value) => {
       tasks = value
         .filter((task: TasksInterface) => task.column === id)
-        .sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
+        .sort((a, b) => a.weight - b.weight)
     });
     loading = false;
   })
 
   // Store Subscription
   tasksStore.subscribe((value) =>{
-    tasks = value.filter((task: any) => task.column === id);
+    tasks = value
+      .filter((task: TasksInterface) => task.column === id)
+      .sort((a, b) => a.weight - b.weight)
   });
 
   function setModal(modal: string, modalId: string){
@@ -41,8 +42,8 @@
 
 </script>
 
-<main id="comp_Column" class="max-w-80 min-w-80 h-[850px] m-4 rounded-lg bg-amber-200">
-    <header class="p-4 h-[150px] font-bold text-gray-900 dark:text-gray-100">
+<main id="column_{id}" class="max-w-80 min-w-80 h-[860px] m-4 rounded-lg bg-amber-200">
+    <header class="p-2 h-[130px] font-bold text-gray-900 dark:text-gray-100">
       <h1 class="text-4xl mb-4 cursor-pointer" on:click={()=>setModal('RenameColumn', id)} on:keydown={() => {}}>
         {name}
       </h1>
@@ -56,11 +57,11 @@
       {/if}
     </header>
     <Divider/>
-    <section class="flex flex-col h-[700px] overflow-scroll">
+    <section class="flex flex-col h-[730px] overflow-scroll">
       {#if !loading}
         {#if tasks.length > 0}
           {#each tasks as task}
-            <Task name={task.name} description={task.description} id={task.id} />
+            <Task name={task.name} description={task.description} id={task.id} weight={task.weight} taskColumn={task.column} />
           {/each}
         {:else}
           <Task message="There are no tasks in this column"/>

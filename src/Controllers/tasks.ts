@@ -1,7 +1,7 @@
 import PocketBase, {RecordModel} from "pocketbase";
 import { writable, Writable } from 'svelte/store';
 import { setupDB } from "./database";
-import { catchError, catchPBError, catchPBSuccess } from "./errors";
+import { catchError, catchPBError } from "./errors";
 
 const pb : Promise<PocketBase | null> = setupDB()
 let customError = new Error();
@@ -18,15 +18,13 @@ export interface Task{
 export const tasksStore : Writable<Task[]> = writable([]);
 
 export async function setUpTasks() {
-  console.log("Setting up tasks")
   const pbInstance = await pb;
   if (!pbInstance) {
     return;
   }
 
   try {
-
-    // Clear the tasks collection
+    // Clear Tasks in Collection
     const tasks : Array<Task> = await pbInstance.collection('tasks').getFullList();
     if (tasks.length !== 0) {
       for (let task of tasks) {
@@ -36,7 +34,6 @@ export async function setUpTasks() {
             catchPBError(record, "controllers_tasks", 17);
             // remove from the store
           } else {
-            catchPBSuccess(record, "controllers_tasks", 19, "task deleted");
             tasksStore.update(tasks => tasks.filter(t => t.id !== task.id));
           }
         } catch (e: any) {
@@ -45,11 +42,13 @@ export async function setUpTasks() {
       }
     }
 
-    // For the Five Columns in the board create five tasks
+    // Create Five Tasks in Each Column
     const columns = await pbInstance.collection('columns').getFullList();
+    // Quit Out if there are no columns
     if (columns.length === 0) {
       return;
     } else {
+      // Loop for task creation
       for (let column of columns) {
         try {
           for (let i = 1; i < 6; i++) {
@@ -66,7 +65,6 @@ export async function setUpTasks() {
               if (record.code) {
                 catchPBError(record, "controllers_tasks", 28);
               } else {
-                catchPBSuccess(record, "controllers_tasks", 30, "task created");
                 data.id = record.id;
                 tasksStore.update(tasks => [...tasks, data]);
               }
@@ -84,6 +82,7 @@ export async function setUpTasks() {
   }
 }
 
+// Pull Tasks from Database on Project Load
 export async function initTasks() {
   const pbInstance = await pb;
   if (!pbInstance) {
@@ -128,7 +127,6 @@ export async function createTask(name: string, description: string, weight: numb
     if (record.code) {
       catchPBError(record, "controllers_tasks", 46);
     } else {
-      catchPBSuccess(record, "controllers_tasks", 48, "task created");
       data.id = record.id;
       tasksStore.update(tasks => [...tasks, data]);
     }
@@ -138,7 +136,6 @@ export async function createTask(name: string, description: string, weight: numb
 }
 
 //Read
-
 //  One
 export async function readOneTask(id: string) {
   const pbInstance = await pb;
@@ -152,7 +149,8 @@ export async function readOneTask(id: string) {
     catchError(e, "Storage_tasks");
   }
 }
-// All
+
+//  All
 export async function readTasks() {
   const pbInstance = await pb;
   if (!pbInstance) {
@@ -167,6 +165,7 @@ export async function readTasks() {
 }
 
 //Update
+//  Rename
 export async function renameTask(id: string, name: string) {
   const pbInstance = await pb;
   if (!pbInstance) {
@@ -183,13 +182,13 @@ export async function renameTask(id: string, name: string) {
         tasks[index].name = name;
         return tasks;
       });
-      catchPBSuccess(result, "controllers_tasks", 84, "task updated");
     }
   } catch (e: any) {
     catchError(e, "controllers_tasks")
   }
 }
 
+//  Describe
 export async function describeTask(id: string, description: string) {
   const pbInstance = await pb;
   if (!pbInstance) {
@@ -206,14 +205,87 @@ export async function describeTask(id: string, description: string) {
         tasks[index].description = description;
         return tasks;
       });
-      catchPBSuccess(result, "controllers_tasks", 84, "task updated");
     }
   } catch (e: any) {
     catchError(e, "controllers_tasks");
   }
 }
 
+// TODO : THIS FUNCTION IS NOT IMPLEMENTED 100%
+//  Move
+export async function moveTask(id: string, newColumn: string | undefined) {
+  const pbInstance = await pb;
+  if (!pbInstance) {
+    return;
+  }
+
+  // Set the column (id) of the task to the new column and set it's weight to -1 to be sorted to the top, then update the store
+  try {
+    const moveRestult = await pbInstance.collection('tasks').update(id, { column: newColumn, weight: -1 });
+    if (!moveRestult.code){
+      tasksStore.update(tasks => {
+        const index = tasks.findIndex(task => task.id === id);
+        if (newColumn != null) {
+          tasks[index].column = newColumn;
+        }
+        tasks[index].weight = -1;
+        return tasks;
+      });
+    }
+  }
+  catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+
+  // Get all the tasks in the updated column and sort them by weight
+  let tasks : Array<Task> = [];
+  try {
+    tasks = await pbInstance.collection('tasks').getFullList( { filter: `column="${newColumn}"`, requestKey: 'moveT' });
+    tasks.sort((a, b) => a.weight - b.weight);
+  }
+  catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+
+  // Loop through the sorted tasks and update their weight to be in order
+  for (let i = 0; i < tasks.length; i++) {
+    console.log(tasks[i])
+    try {
+      const reorderResult = await pbInstance.collection('tasks').update(tasks[i].id, { weight: i+1 });
+      const newItem = await pbInstance.collection('tasks').getFirstListItem(`id="${tasks[i].id}"`);
+      console.log(newItem)
+    } catch (e: any) {
+      catchError(e, "controllers_tasks");
+    }
+    // update the store to update the task's weight
+    tasksStore.update(tasks => {
+      const index = tasks.findIndex(task => task.id === id);
+      tasks[index].weight = (i+1);
+      return tasks;
+    });
+  }
+
+  // Find all the tasks in the new column, which is now sorted and update the store
+  try {
+    const newColumnResult = await pbInstance.collection('tasks').getFullList( { filter: `column="${newColumn}"`, requestKey: 'moveT' });
+    // Go Through the newColumnResult and update the task in the store completely
+    for (let task of newColumnResult) {
+      tasksStore.update(tasks => {
+        const index = tasks.findIndex(t => t.id === task.id);
+        // @ts-ignore - This works, fuck off.
+        tasks[index] = task;
+        return tasks;
+      });
+    }
+  } catch (e: any) {
+    catchError(e, "controllers_tasks");
+  }
+
+}
+
+
 //Delete
+//  One
 export async function deleteTask(id: string){
   const pbInstance = await pb;
   if (!pbInstance) {
@@ -225,7 +297,6 @@ export async function deleteTask(id: string){
     if (record.code) {
       catchPBError(record, "controllers_tasks", 90);
     } else {
-      catchPBSuccess(record, "controllers_tasks", 92, "task deleted");
       tasksStore.update(tasks => tasks.filter(task => task.id !== id));
       return true;
     }
