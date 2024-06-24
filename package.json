@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "db": "./database/pocketbase serve",
+    "sync" : "cp ./documents/*.md ./ && git add . && git commit && git push",
     "build": "vite build",
     "preview": "vite preview"
   },
